@@ -18,9 +18,9 @@ publishing {
 
         // Provide artifacts information required by Maven Central
         pom {
-            name.set("Kotlin Multiplatform library template")
-            description.set("Dummy library to test deployment to Maven Central")
-            url.set("https://github.com/Kotlin/multiplatform-library-template")
+            name.set("Ivy Apps DI")
+            description.set("A simple DI container for Kotlin Multiplatform apps.")
+            url.set("https://github.com/Ivy-Apps/di")
 
             licenses {
                 license {
@@ -30,14 +30,14 @@ publishing {
             }
             developers {
                 developer {
-                    id.set("JetBrains")
-                    name.set("JetBrains Team")
-                    organization.set("JetBrains")
-                    organizationUrl.set("https://www.jetbrains.com")
+                    id.set("IvyApps")
+                    name.set("Ivy Apps")
+                    organization.set("Ivy Apps")
+                    organizationUrl.set("https://ivy-apps.com")
                 }
             }
             scm {
-                url.set("https://github.com/Kotlin/multiplatform-library-template")
+                url.set("https://github.com/Ivy-Apps/di")
             }
         }
     }
