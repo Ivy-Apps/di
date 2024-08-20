@@ -19,7 +19,7 @@ licensing, contribution guideline, code of conduct and others.
 1. - [x] Edit [`groupId` and `version`](convention-plugins/src/main/kotlin/module.publication.gradle.kts#L10-L11)
     1. If you need the Android support update namespace [there](library/build.gradle.kts#L38) too
     1. If you don't need an Android support delete the [`android` section](library/build.gradle.kts#L37-L43)
-1. - [ ] Edit [build targets you need](library/build.gradle.kts#L9-L21)
+1. - [x] Edit [build targets you need](library/build.gradle.kts#L9-L21)
 
 At this stage, you have everything set to work with Kotlin Multiplatform. The project should be buildable (but you might need to provide actual starting values for the platforms you need).
 
