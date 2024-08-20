@@ -4,10 +4,24 @@ kotlin = "2.0.0"
 nexus-publish = "2.0.0"
 android-minSdk = "24"
 android-compileSdk = "34"
+kotest = "5.9.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 nexus-publish = { module = "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin", version.ref = "nexus-publish" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+google-testparameterinjector = { module = "com.google.testparameterinjector:test-parameter-injector", version = "1.16" }
+mockk = { module = "io.mockk:mockk", version = "1.13.12" }
+
+[bundles]
+test = [
+    "kotlin-test",
+    "kotlin-test-junit",
+    "google-testparameterinjector",
+    "mockk",
+    "kotest-assertions",
+]
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
