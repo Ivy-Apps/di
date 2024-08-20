@@ -3,7 +3,7 @@ plugins {
 }
 
 allprojects {
-    group = "org.jetbrains.kotlinx.multiplatform-library-template"
+    group = "io.github.ivy-apps.di"
     version = "0.0.1"
 }
 
