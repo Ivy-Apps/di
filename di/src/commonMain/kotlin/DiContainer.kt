@@ -15,12 +15,12 @@ object Di {
         modules.forEach(DiModule::init)
     }
 
-    fun appScope(block: Scope.() -> Unit) {
-        AppScope.block()
-    }
+    fun appScope(block: Scope.() -> Unit) = scope(AppScope, block)
 
-    fun featureScope(block: Scope.() -> Unit) {
-        FeatureScope.block()
+    fun featureScope(block: Scope.() -> Unit) = scope(FeatureScope, block)
+
+    fun scope(scope: Scope, block: Scope.() -> Unit) {
+        scope.block()
     }
 
     inline fun <reified T : Any> Scope.register(noinline factory: () -> T) {

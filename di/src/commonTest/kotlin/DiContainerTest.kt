@@ -1,108 +1,106 @@
+import Di.register
+import Di.singleton
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.ktor.client.*
-import io.mockk.mockk
-import ivy.di.Di.register
-import ivy.di.Di.singleton
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class DiContainerTest {
 
-    @Before
+    @BeforeTest
     fun setup() {
         Di.reset()
     }
 
     @Test
     fun `creates an instance in app scope`() {
-        // given
+        // Given
         Di.appScope { register { FakeStateHolder() } }
         Di.get<FakeStateHolder>().number = 42
 
-        // when
+        // When
         val stateHolder = Di.get<FakeStateHolder>()
 
-        // then
+        // Then
         stateHolder.number shouldBe 0
     }
 
     @Test
     fun `creates a singleton in app scope`() {
-        // given
+        // Given
         Di.appScope { singleton { FakeStateHolder() } }
         Di.get<FakeStateHolder>().number = 42
 
-        // when
+        // When
         val stateHolder = Di.get<FakeStateHolder>()
 
-        // then
+        // Then
         stateHolder.number shouldBe 42
     }
 
     @Test
     fun `constructs a more complex DI graph`() {
-        // given
+        // Given
         Di.appScope {
             singleton { FakeStateHolder() }
-            singleton { mockk<HttpClient>() }
+            singleton { HttpClient() }
             register { FakeDataSource(Di.get()) }
             register { FakeRepository(Di.get()) }
             register { FakeViewModel(Di.get(), Di.get()) }
         }
 
-        // when
+        // When
         val viewModel: FakeViewModel = Di.get()
 
-        // then
+        // Then
         viewModel.shouldNotBeNull()
     }
 
     @Test
     fun `throws an exception for not registered classes`() {
-        // when
-        val thrownException = shouldThrow<DiError> {
+        // When
+        val thrownException = shouldThrow<DependencyInjectionError> {
             Di.get<FakeStateHolder>()
         }
 
-        // then
+        // Then
         thrownException.message.shouldNotBeNull()
     }
 
     @Test
     fun `binds an interface`() {
-        // given
+        // Given
         Di.appScope {
             register<FakeAbstraction> { FakeImplOne() }
         }
 
-        // when
+        // When
         val instance = Di.get<FakeAbstraction>()
 
-        // then
+        // Then
         instance.shouldNotBeNull()
     }
 
     @Test
-    fun `creates an instance in screen scope`() {
-        // given
-        Di.screenScope {
+    fun `creates an instance in feature scope`() {
+        // Given
+        Di.featureScope {
             register { FakeStateHolder() }
         }
         Di.get<FakeStateHolder>().number = 42
 
-        // when
+        // When
         val stateHolder = Di.get<FakeStateHolder>()
 
-        // then
+        // Then
         stateHolder.number shouldBe 0
     }
 
     @Test
-    fun `creates a singleton in screen scope`() {
+    fun `creates a singleton in feature scope`() {
         // given
-        Di.screenScope {
+        Di.featureScope {
             singleton { FakeStateHolder() }
         }
         Di.get<FakeStateHolder>().number = 42
@@ -114,7 +112,7 @@ class DiContainerTest {
         stateHolder.number shouldBe 42
 
         // when the scope is reset
-        Di.clearInstances(Di.ScreenScope)
+        Di.clearInstances(FeatureScope)
 
         // then after the reset
         Di.get<FakeStateHolder>().number shouldBe 0
@@ -143,6 +141,7 @@ class FakeStateHolder {
 }
 
 class FakeDataSource(@Suppress("unused") val httpClient: HttpClient)
+class HttpClient
 class FakeRepository(@Suppress("unused") val dataSource: FakeDataSource)
 class FakeViewModel(
     @Suppress("unused")
