@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "multiplatform-library-template"
-include(":library")
+include(":di")
