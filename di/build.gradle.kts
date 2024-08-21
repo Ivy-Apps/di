@@ -37,7 +37,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.ivy_apps.di"
+    namespace = "com.ivy_apps.di"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

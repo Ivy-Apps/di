@@ -3,7 +3,7 @@ plugins {
 }
 
 allprojects {
-    group = "io.github.ivy-apps.di"
+    group = "com.ivy-apps.di"
     version = "0.0.1"
 }
 
