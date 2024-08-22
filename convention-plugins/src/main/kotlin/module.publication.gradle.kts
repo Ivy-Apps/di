@@ -1,51 +1,35 @@
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.`maven-publish`
+import gradle.kotlin.dsl.accessors._8edd1b0c1852f0ac869e9c414c462ba9.mavenPublishing
 
 plugins {
-    `maven-publish`
-    signing
+    id("com.vanniktech.maven.publish")
 }
 
-publishing {
-    // Configure all publications
-    publications.withType<MavenPublication> {
-        // Stub javadoc.jar artifact
-        artifact(tasks.register("${name}JavadocJar", Jar::class) {
-            archiveClassifier.set("javadoc")
-            archiveAppendix.set(this@withType.name)
-        })
+mavenPublishing {
+    coordinates("com.ivy-apps.di", "di", "0.0.1")
 
-        // Provide artifacts information required by Maven Central
-        pom {
-            name.set("Ivy Apps DI")
-            description.set("A simple DI container for Kotlin Multiplatform apps.")
-            url.set("https://github.com/Ivy-Apps/di")
-
-            licenses {
-                license {
-                    name.set("MIT")
-                    url.set("https://opensource.org/licenses/MIT")
-                }
-            }
-            developers {
-                developer {
-                    id.set("IvyApps")
-                    name.set("Ivy Apps")
-                    organization.set("Ivy Apps")
-                    organizationUrl.set("https://ivy-apps.com")
-                }
-            }
-            scm {
-                url.set("https://github.com/Ivy-Apps/di")
+    pom {
+        name.set("Ivy Apps DI")
+        description.set("A simple DI container for Kotlin Multiplatform apps.")
+        inceptionYear.set("2024")
+        url.set("https://github.com/Ivy-Apps/di")
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
-    }
-}
-
-signing {
-    if (project.hasProperty("signing.gnupg.keyName")) {
-        useGpgCmd()
-        sign(publishing.publications)
+        developers {
+            developer {
+                id.set("Ivy-Apps")
+                name.set("Ivy Apps")
+                url.set("https://github.com/Ivy-Apps/")
+            }
+        }
+        scm {
+            url.set("https://github.com/Ivy-Apps/di/")
+            connection.set("scm:git:git://github.com/Ivy-Apps/di.git")
+            developerConnection.set("scm:git:ssh://git@github.com/Ivy-Apps/di.git")
+        }
     }
 }
