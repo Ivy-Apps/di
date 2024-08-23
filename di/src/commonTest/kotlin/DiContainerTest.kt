@@ -99,34 +99,49 @@ class DiContainerTest {
 
     @Test
     fun `creates a singleton in feature scope`() {
-        // given
+        // Given
         Di.featureScope {
             singleton { FakeStateHolder() }
         }
         Di.get<FakeStateHolder>().number = 42
 
-        // when
+        // When
         val stateHolder = Di.get<FakeStateHolder>()
 
-        // then
+        // Then
         stateHolder.number shouldBe 42
 
-        // when the scope is reset
+        // When the scope is reset
         Di.clearInstances(FeatureScope)
 
-        // then after the reset
+        // Then after the reset
         Di.get<FakeStateHolder>().number shouldBe 0
     }
 
     @Test
     fun `di module registration works`() {
-        // given
+        // Given
         Di.init(setOf(FakeModule))
 
-        // when
+        // When
         val instance = Di.get<FakeModuleDep>()
 
-        // then
+        // Then
+        instance.shouldNotBeNull()
+    }
+
+    @Test
+    fun `creates a new scope and dependency in it`() {
+        // Given
+        val newScope = Di.Scope("new")
+
+        // When
+        Di.scope(newScope) {
+            register { FakeStateHolder() }
+        }
+        val instance = Di.get<FakeStateHolder>()
+
+        // Then
         instance.shouldNotBeNull()
     }
 }

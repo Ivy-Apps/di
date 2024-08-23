@@ -1,15 +1,18 @@
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
-
 val AppScope = Di.Scope("app")
 val FeatureScope = Di.Scope("feature")
 
-object Di {
+typealias Factory = () -> Any
 
+object Di {
+    private val DEFAULT_SCOPES = setOf(AppScope, FeatureScope)
+    private val scopes = DEFAULT_SCOPES.toMutableSet()
+
+    val factories = mutableMapOf<DependencyKey, Factory>()
     val singletons = mutableSetOf<KClass<*>>()
     val instances = mutableMapOf<DependencyKey, Any>()
-    val factories = mutableMapOf<DependencyKey, () -> Any>()
 
     fun init(modules: Set<DiModule>) {
         modules.forEach(DiModule::init)
@@ -20,6 +23,7 @@ object Di {
     fun featureScope(block: Scope.() -> Unit) = scope(FeatureScope, block)
 
     fun scope(scope: Scope, block: Scope.() -> Unit) {
+        scopes.add(scope)
         scope.block()
     }
 
@@ -57,18 +61,20 @@ object Di {
         }
     }
 
-    inline fun factory(
+    fun factory(
         classKey: KClass<*>
-    ): Pair<Scope, () -> Any> = scopedFactory(FeatureScope, classKey)
-        ?: scopedFactory(AppScope, classKey)
-        ?: throw DependencyInjectionError("No factory found for class $classKey")
+    ): Pair<Scope, Factory> = scopes
+        .firstNotNullOfOrNull { scope ->
+            scopedFactoryOrNull(scope, classKey)
+        } ?: throw DependencyInjectionError("No factory found for class $classKey")
 
-    inline fun scopedFactory(
+    private fun scopedFactoryOrNull(
         scope: Scope,
         classKey: KClass<*>
-    ): Pair<Scope, () -> Any>? = factories[DependencyKey(scope, classKey)]?.let {
-        scope to it
-    }
+    ): Pair<Scope, () -> Any>? = factories[DependencyKey(scope, classKey)]
+        ?.let { factory ->
+            scope to factory
+        }
 
     fun clearInstances(scope: Scope) {
         instances.keys.forEach {
@@ -82,6 +88,10 @@ object Di {
         instances.clear()
         factories.clear()
         singletons.clear()
+        scopes.apply {
+            clear()
+            addAll(DEFAULT_SCOPES)
+        }
     }
 
     data class DependencyKey(
