@@ -14,10 +14,10 @@ object Di {
 
     val factories = mutableMapOf<DependencyKey, Factory>()
     val singletons = mutableSetOf<KClass<*>>()
-    val instances = mutableMapOf<DependencyKey, Any>()
+    val singletonInstances = mutableMapOf<DependencyKey, Any>()
 
-    fun init(modules: Set<DiModule>) {
-        modules.forEach(DiModule::init)
+    fun init(modules: Set<Module>) {
+        modules.forEach(Module::init)
     }
 
     fun appScope(block: Scope.() -> Unit) = scope(AppScope, block)
@@ -44,22 +44,19 @@ object Di {
         val (scope, factory) = factory(classKey)
         val depKey = DependencyKey(scope, classKey)
         return if (classKey in singletons) {
-            if (depKey in instances) {
+            if (depKey in singletonInstances) {
                 // single instance already created
-                instances[depKey] as T
+                singletonInstances[depKey] as T
             } else {
                 // create a new instance for the singleton
                 val instance = (factory() as T).also {
-                    instances[depKey] = it
+                    singletonInstances[depKey] = it
                 }
                 instance
             }
         } else {
             // create a new instance
-            val instance = (factory() as T).also {
-                instances[depKey] = it
-            }
-            instance
+            factory() as T
         }
     }
 
@@ -79,15 +76,15 @@ object Di {
         }
 
     fun clearInstances(scope: Scope) {
-        instances.keys.forEach {
-            if (it.scope == scope) {
-                instances.remove(it)
+        singletonInstances.keys.forEach { instanceKey ->
+            if (instanceKey.scope == scope) {
+                singletonInstances.remove(instanceKey)
             }
         }
     }
 
     fun reset() {
-        instances.clear()
+        singletonInstances.clear()
         factories.clear()
         singletons.clear()
         scopes.apply {
@@ -103,10 +100,10 @@ object Di {
 
     @JvmInline
     value class Scope(val value: String)
+
+    interface Module {
+        fun init()
+    }
 }
 
 class DependencyInjectionError(msg: String) : IllegalStateException(msg)
-
-interface DiModule {
-    fun init()
-}

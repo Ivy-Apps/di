@@ -5,6 +5,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import ivy.di.Di.register
 import ivy.di.Di.singleton
+import ivy.di.testsupport.*
+import ivy.di.testsupport.di.FakeDiModule
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -16,7 +18,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `creates an instance in app scope`() {
+    fun createsAnInstance_in_appScope() {
         // Given
         Di.appScope { register { FakeStateHolder() } }
         Di.get<FakeStateHolder>().number = 42
@@ -29,7 +31,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `creates a singleton in app scope`() {
+    fun creates_a_singleton_in_appScope() {
         // Given
         Di.appScope { singleton { FakeStateHolder() } }
         Di.get<FakeStateHolder>().number = 42
@@ -42,7 +44,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `constructs a more complex DI graph`() {
+    fun moreComplex_DI_graph_1() {
         // Given
         Di.appScope {
             singleton { FakeStateHolder() }
@@ -60,7 +62,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `throws an exception for not registered classes`() {
+    fun throws_for_not_registered_classes() {
         // When
         val thrownException = shouldThrow<DependencyInjectionError> {
             Di.get<FakeStateHolder>()
@@ -71,7 +73,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `binds an interface`() {
+    fun binds_interface() {
         // Given
         Di.appScope {
             register<FakeAbstraction> { FakeImplOne() }
@@ -85,7 +87,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `creates an instance in feature scope`() {
+    fun createsAnInstance_in_featureScope() {
         // Given
         Di.featureScope {
             register { FakeStateHolder() }
@@ -100,7 +102,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `creates a singleton in feature scope`() {
+    fun creates_a_singleton_in_featureScope() {
         // Given
         Di.featureScope {
             singleton { FakeStateHolder() }
@@ -121,9 +123,9 @@ class DiContainerTest {
     }
 
     @Test
-    fun `di module registration works`() {
+    fun moduleRegistration() {
         // Given
-        Di.init(setOf(FakeModule))
+        Di.init(setOf(FakeDiModule))
 
         // When
         val instance = Di.get<FakeModuleDep>()
@@ -133,7 +135,7 @@ class DiContainerTest {
     }
 
     @Test
-    fun `creates a new scope and dependency in it`() {
+    fun create_DI_scope() {
         // Given
         val newScope = Di.Scope("new")
 
@@ -145,31 +147,5 @@ class DiContainerTest {
 
         // Then
         instance.shouldNotBeNull()
-    }
-}
-
-interface FakeAbstraction
-class FakeImplOne : FakeAbstraction
-
-@Suppress("unused")
-class FakeImplTwo : FakeAbstraction
-class FakeStateHolder {
-    var number = 0
-}
-
-class FakeDataSource(@Suppress("unused") val httpClient: HttpClient)
-class HttpClient
-class FakeRepository(@Suppress("unused") val dataSource: FakeDataSource)
-class FakeViewModel(
-    @Suppress("unused")
-    val repository: FakeRepository,
-    @Suppress("unused")
-    val stateHolder: FakeStateHolder
-)
-
-class FakeModuleDep
-object FakeModule : DiModule {
-    override fun init() = Di.appScope {
-        register { FakeModuleDep() }
     }
 }
