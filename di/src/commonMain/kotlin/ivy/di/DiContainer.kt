@@ -1,3 +1,5 @@
+package ivy.di
+
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 

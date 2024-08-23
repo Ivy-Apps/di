@@ -1,8 +1,10 @@
-import Di.register
-import Di.singleton
+package ivy.di
+
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import ivy.di.Di.register
+import ivy.di.Di.singleton
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
