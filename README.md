@@ -35,6 +35,58 @@ fun main() = runBlocking {
 
 ```
 
+### Modules
+
+Modules help to consolidate DI logic together and reuse it when initing new Ivy DI graphs.
+
+**Modules examples:**
+```kotlin
+object SharedModule : Di.Module {
+    override fun init() = Di.appScope {
+        singleton<Platform> { platform() }
+        singletonJson()
+        singleTonKtorClient()
+        register<ServerUrlProvider> { HerokuServerUrlProvider() }
+        register { LessonDataSource(Di.get(), Di.get()) }
+        register { TopicsDataSource(Di.get(), Di.get()) }
+        register { CoursesDataSource(Di.get(), Di.get()) }
+        register { LottieAnimationLoader(Di.get()) }
+    }
+}
+object DataModule : Di.Module {
+    override fun init() = Di.appScope {
+        register { Database() }
+        register { LessonContentDataSource(Di.get(), Di.get()) }
+        register { LessonsRepository(Di.get()) }
+        register { CoursesRepository() }
+        register { TopicsRepository() }
+    }
+}
+fun main(args: Array<String>) {
+    Di.init(
+        modules = setOf(
+            SharedModule,
+            DataModule,
+            StartupModule(args),
+        )
+    )
+    val server = Di.get<LearnServer>()
+
+    val port = System.getenv("PORT")?.toInt() ?: 8081
+    println("Starting server on port $port...")
+    embeddedServer(
+        Netty,
+        port = port,
+        host = "0.0.0.0",
+        module = {
+            server.init(this).onLeft {
+                throw ServerInitializationException(reason = it)
+            }
+        },
+    ).start(wait = true)
+}
+```
+
 ### Scopes
 
 Dependencies in Ivy DI are scope-based, allowing efficient memory management of the dependency graph.
