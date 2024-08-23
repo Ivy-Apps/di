@@ -156,7 +156,7 @@ class IterationHandler(
     }
 }
 
-val IterationScope = Di.Scope("iteration")
+val IterationScope = Di.newScope("iteration")
 
 fun main() {
     Di.appScope {

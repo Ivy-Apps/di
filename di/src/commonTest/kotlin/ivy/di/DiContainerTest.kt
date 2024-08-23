@@ -137,10 +137,10 @@ class DiContainerTest {
     @Test
     fun create_DI_scope() {
         // Given
-        val newScope = Di.Scope("new")
+        val customScope = Di.newScope("new")
 
         // When
-        Di.scope(newScope) {
+        Di.scope(customScope) {
             register { FakeStateHolder() }
         }
         val instance = Di.get<FakeStateHolder>()

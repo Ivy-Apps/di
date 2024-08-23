@@ -3,14 +3,13 @@ package ivy.di
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
-val AppScope = Di.Scope("app")
-val FeatureScope = Di.Scope("feature")
-
 typealias Factory = () -> Any
 
+val AppScope = Di.newScope("app")
+val FeatureScope = Di.newScope("feature")
+
 object Di {
-    private val DEFAULT_SCOPES = setOf(AppScope, FeatureScope)
-    private val scopes = DEFAULT_SCOPES.toMutableSet()
+    private val scopes = mutableSetOf<Scope>()
 
     val factories = mutableMapOf<DependencyKey, Factory>()
     val singletons = mutableSetOf<KClass<*>>()
@@ -20,14 +19,10 @@ object Di {
         modules.forEach(Module::init)
     }
 
-    fun appScope(block: Scope.() -> Unit) = scope(AppScope, block)
-
-    fun featureScope(block: Scope.() -> Unit) = scope(FeatureScope, block)
-
-    fun scope(scope: Scope, block: Scope.() -> Unit) {
-        scopes.add(scope)
-        scope.block()
-    }
+    fun appScope(block: Scope.() -> Unit) = AppScope.block()
+    fun featureScope(block: Scope.() -> Unit) = FeatureScope.block()
+    fun newScope(name: String): Scope = Scope(name).also(scopes::add)
+    fun scope(scope: Scope, block: Scope.() -> Unit) = scope.block()
 
     inline fun <reified T : Any> Scope.register(noinline factory: () -> T) {
         factories[DependencyKey(this, T::class)] = factory
@@ -87,10 +82,6 @@ object Di {
         singletonInstances.clear()
         factories.clear()
         singletons.clear()
-        scopes.apply {
-            clear()
-            addAll(DEFAULT_SCOPES)
-        }
     }
 
     data class DependencyKey(
@@ -99,7 +90,7 @@ object Di {
     )
 
     @JvmInline
-    value class Scope(val value: String)
+    value class Scope internal constructor(val value: String)
 
     interface Module {
         fun init()
