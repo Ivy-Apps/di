@@ -39,7 +39,7 @@ fun main() = runBlocking {
 
 Modules help to consolidate DI logic together and reuse it when initing new Ivy DI graphs.
 
-**Modules examples:**
+**DI modules example:**
 ```kotlin
 object SharedModule : Di.Module {
     override fun init() = Di.appScope {
