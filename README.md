@@ -84,3 +84,44 @@ class HomeScreen : Screen() {
     }
 }
 ```
+
+**Custom scope example:**
+```kotlin
+class TotalSum {
+    private var sum = 0
+    fun add(value: Int) {
+        sum += value
+    }
+    fun get() = sum
+}
+class IterationContext(val index: Int)
+class IterationHandler(
+    private val iteration: IterationContext,
+    private val totalSum: TotalSum,
+) {
+    fun process() {
+        totalSum.add(iteration.index)
+    }
+}
+
+val IterationScope = Di.Scope("iteration")
+
+fun main() {
+    Di.appScope {
+        // Dependencies here live as long as the app lives
+        singleton { TotalSum() }
+    }
+
+    for (i in 0..100) {
+        Di.scope(IterationScope) {
+            // Dependencies here live only for one iteration
+            singleton { IterationContext(index = i) }
+            register { IterationHandler(Di.get(), Di.get()) }
+        }
+        Di.get<IterationHandler>().process()
+        Di.clearInstances(IterationScope) // remove all instances for this iteration
+    }
+
+    println(Di.get<TotalSum>().get())
+}
+```
