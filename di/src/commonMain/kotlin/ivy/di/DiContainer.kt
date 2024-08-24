@@ -78,24 +78,21 @@ object Di {
         } ?: throw DependencyInjectionError(diErrorMsg(classKey, named))
 
     private fun diErrorMsg(classKey: KClass<*>, named: Any?): String = buildString {
-        append("No factory found for class")
+        append("No factory")
         if (named != null) {
-            append(" with qualifier named \"$named\": ")
-        } else {
-            append(": ")
+            append(" with qualifier named \"$named\"")
         }
+        append(" found: ")
         append('[')
-        append(classKey.qualifiedName)
+        append(classKey.toString())
         append(']')
         val dependencyId = buildString {
-            append('\'')
-            append(classKey.qualifiedName)
+            append(classKey.toString())
             if (named != null) {
                 append("(named=\"$named\")")
             }
-            append('\'')
         }
-        append("\nDid you forget to register $dependencyId in Ivy DI?")
+        append("\nDid you forget to register '$dependencyId' in Ivy DI?")
     }
 
     private fun scopedFactoryOrNull(
