@@ -26,14 +26,14 @@ object Di {
 
     inline fun <reified T : Any> Scope.register(
         named: Any? = null,
-        noinline factory: () -> T
+        noinline factory: () -> T,
     ) {
         factories[DependencyKey(this, T::class, named)] = factory
     }
 
     inline fun <reified T : Any> Scope.singleton(
         named: Any? = null,
-        noinline factory: () -> T
+        noinline factory: () -> T,
     ) {
         val classKey = T::class
         factories[DependencyKey(this, classKey, named)] = factory
