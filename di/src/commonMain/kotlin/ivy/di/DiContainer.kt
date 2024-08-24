@@ -16,8 +16,10 @@ object Di {
     val singletonInstances = mutableMapOf<DependencyKey, Any>()
 
     fun init(modules: Set<Module>) {
-        modules.forEach(Module::init)
+        modules.forEach(::init)
     }
+
+    fun init(module: Module) = module.init()
 
     fun appScope(block: Scope.() -> Unit) = AppScope.block()
     fun featureScope(block: Scope.() -> Unit) = FeatureScope.block()
@@ -38,6 +40,12 @@ object Di {
         val classKey = T::class
         factories[DependencyKey(this, classKey, named)] = factory
         singletons.add(classKey)
+    }
+
+    inline fun <reified Base : Any, reified Impl : Base> Scope.binds(
+        named: Any? = null,
+    ) {
+        register<Base> { get<Impl>(named = named) }
     }
 
     inline fun <reified T : Any> get(named: Any? = null): T {
@@ -67,7 +75,28 @@ object Di {
     ): Pair<Scope, Factory> = scopes
         .firstNotNullOfOrNull { scope ->
             scopedFactoryOrNull(scope, classKey, named)
-        } ?: throw DependencyInjectionError("No factory found for class $classKey")
+        } ?: throw DependencyInjectionError(diErrorMsg(classKey, named))
+
+    private fun diErrorMsg(classKey: KClass<*>, named: Any?): String = buildString {
+        append("No factory found for class")
+        if (named != null) {
+            append(" with qualifier named \"$named\": ")
+        } else {
+            append(": ")
+        }
+        append('[')
+        append(classKey.qualifiedName)
+        append(']')
+        val dependencyId = buildString {
+            append('\'')
+            append(classKey.qualifiedName)
+            if (named != null) {
+                append("(named=\"$named\")")
+            }
+            append('\'')
+        }
+        append("\nDid you forget to register $dependencyId in Ivy DI?")
+    }
 
     private fun scopedFactoryOrNull(
         scope: Scope,
