@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ivy-apps-di"
 include(":di")
+include(":samples")

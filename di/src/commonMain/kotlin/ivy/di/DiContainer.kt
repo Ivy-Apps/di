@@ -24,20 +24,26 @@ object Di {
     fun newScope(name: String): Scope = Scope(name).also(scopes::add)
     fun scope(scope: Scope, block: Scope.() -> Unit) = scope.block()
 
-    inline fun <reified T : Any> Scope.register(noinline factory: () -> T) {
-        factories[DependencyKey(this, T::class)] = factory
+    inline fun <reified T : Any> Scope.register(
+        named: Any? = null,
+        noinline factory: () -> T
+    ) {
+        factories[DependencyKey(this, T::class, named)] = factory
     }
 
-    inline fun <reified T : Any> Scope.singleton(noinline factory: () -> T) {
+    inline fun <reified T : Any> Scope.singleton(
+        named: Any? = null,
+        noinline factory: () -> T
+    ) {
         val classKey = T::class
-        factories[DependencyKey(this, classKey)] = factory
+        factories[DependencyKey(this, classKey, named)] = factory
         singletons.add(classKey)
     }
 
-    inline fun <reified T : Any> get(): T {
+    inline fun <reified T : Any> get(named: Any? = null): T {
         val classKey = T::class
-        val (scope, factory) = factory(classKey)
-        val depKey = DependencyKey(scope, classKey)
+        val (scope, factory) = factory(classKey, named)
+        val depKey = DependencyKey(scope, classKey, named)
         return if (classKey in singletons) {
             if (depKey in singletonInstances) {
                 // single instance already created
@@ -56,16 +62,18 @@ object Di {
     }
 
     fun factory(
-        classKey: KClass<*>
+        classKey: KClass<*>,
+        named: Any?,
     ): Pair<Scope, Factory> = scopes
         .firstNotNullOfOrNull { scope ->
-            scopedFactoryOrNull(scope, classKey)
+            scopedFactoryOrNull(scope, classKey, named)
         } ?: throw DependencyInjectionError("No factory found for class $classKey")
 
     private fun scopedFactoryOrNull(
         scope: Scope,
-        classKey: KClass<*>
-    ): Pair<Scope, () -> Any>? = factories[DependencyKey(scope, classKey)]
+        classKey: KClass<*>,
+        named: Any?,
+    ): Pair<Scope, () -> Any>? = factories[DependencyKey(scope, classKey, named)]
         ?.let { factory ->
             scope to factory
         }
@@ -86,7 +94,8 @@ object Di {
 
     data class DependencyKey(
         val scope: Scope,
-        val klass: KClass<*>
+        val klass: KClass<*>,
+        val qualifier: Any?,
     )
 
     @JvmInline
