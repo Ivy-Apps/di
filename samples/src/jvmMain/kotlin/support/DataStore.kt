@@ -1,4 +1,4 @@
-package setup
+package support
 
 interface DataStore<T>
 class Preferences

@@ -6,7 +6,7 @@ import ivy.di.Di.init
 import ivy.di.autowire.autoWire
 import ivy.di.autowire.autoWireSingleton
 import module.AndroidModule
-import setup.*
+import support.*
 
 fun main() {
     Di.appScope {
