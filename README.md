@@ -10,7 +10,7 @@ A simple, lightweight and efficient Dependency Injection (DI) container for Kotl
 implementation("com.ivy-apps:di:0.0.0")
 ```
 
-## Usage
+## Basic Usage
 
 Ivy DI implements a runtime DI container where you `Di.register { A() }` factory methods and `Di.get<A>()` dependency instances.
 Each call to `Di.get()` creates a new instance. If you want to have the same instance use `Di.singleton { A() }`.
@@ -92,6 +92,12 @@ To bind a specific implementation to an interface (or an abstract class) use `bi
 ### 6. Named dependencies
 
 TBD
+
+### 7. Modules
+
+TBD
+
+## Advanced Usage
 
 ## Examples
 
