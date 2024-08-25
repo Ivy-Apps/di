@@ -173,18 +173,18 @@ To re-use and encapsulate DI logic you can create `Di.Module`s that you can late
 
 ### 1. Scopes
 
-Ivy DI supports grouping your dependencies into scopes so you can manage their lifecycle
-and free resources as soon as the given scope is no longer needed. **AppScope** and **FeatureScope**
+Ivy DI supports grouping your dependencies into scopes. This way you can manage their lifecycle
+and free resources as soon as they are no longer needed. **AppScope** and **FeatureScope**
 are built-in but you can easily define your own scopes using `Di.newScope("my-scope")`.
 
 ```kotlin
 data class UserInfo(val id: String, name: String)
 
 val UserScope = Di.newScope("user")
-fun Di.userScope(block: Di.Scope.() -> Unit) = Di.scope(UserScope, block)
+fun Di.userScope(block: Di.Scope.() -> Unit) = Di.scope(UserScope, block) // helper function (optional)
 
 suspend fun login() {
-  val userInfo = loginInternally()
+  val userInfo = loginInternally() // UserInfo("1", "John")
   Di.userScope {
     // Register dependencies for the lifecycle of a user
     singleton { userInfo }
@@ -192,10 +192,10 @@ suspend fun login() {
 }
 
 // Note: This function must be called only for logged-in users, otherwise Di.get() will throw an exception.
-suspend fun dashboard() {
+fun dashboard() {
   // Use user related dependencies
   val userInfo = Di.get<UserInfo>()
-  println("Hello, ${userInfo.name}")
+  println("Hello, ${userInfo.name}") // "Hello, John"
 }
 
 suspend fun logout() {
