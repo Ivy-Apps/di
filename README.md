@@ -25,11 +25,24 @@ In a nutshell, you first register dependency factory functions in the container 
 
 ### 0. Setup
 
+You can find Ivy DI in our [Maven Central repository](https://central.sonatype.com/artifact/com.ivy-apps/di).
+
+**Gradle (Kotlin)**
 ```gradle
 implementation("com.ivy-apps:di:0.0.0")
 ```
 
-That's all you need! Replace "0.0.0" with [![Maven Central Version](https://img.shields.io/maven-central/v/com.ivy-apps/di)](https://central.sonatype.com/artifact/com.ivy-apps/di).
+or
+
+**Version Catalog**
+```toml
+[libraries]
+ivyApps-di = { module = "com.ivy-apps:di", version = "0.0.0" }
+```
+
+Replace "0.0.0" with: [![Maven Central Version](https://img.shields.io/maven-central/v/com.ivy-apps/di)](https://central.sonatype.com/artifact/com.ivy-apps/di)
+
+That's all you need! Now let's start using Ivy DI ⚡
 
 ### 1. Register a dependency
 
