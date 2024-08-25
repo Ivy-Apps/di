@@ -3,17 +3,43 @@
 
 # Ivy DI
 
-A simple and lightweight Dependency Injection (DI) container for Kotlin Multiplatform.
+A simple, lightweight and efficient Dependency Injection (DI) container for Kotlin Multiplatform.
 
-**Dependency:**
+**Instalation:**
 ```gradle
 implementation("com.ivy-apps:di:0.0.0")
 ```
 
 ## Usage
 
-Ivy DI implements a runtime DI container where you `Di.register {...}` factory methods and `Di.get()` dependency instances.
-Each call to `Di.get()` creates a new instance. If you want to have the same instance use `Di.singleton {...}`.
+Ivy DI implements a runtime DI container where you `Di.register { A() }` factory methods and `Di.get<A>()` dependency instances.
+Each call to `Di.get()` creates a new instance. If you want to have the same instance use `Di.singleton { A() }`.
+
+### 1. Register a dependency
+
+```kotlin
+class A
+class B(val a: A)
+
+Di.appScope {
+  register { A() }
+  register { B(a = Di.get() }
+}
+```
+
+Instances of `A` and `B` won't be created until these dependencies are requested.
+
+### 2. Get dependency instance
+
+```kotlin
+// instances of B and its dependencies will be created
+Di.get<B>() // isntance 1 of B
+Di.get<B>() // instance 2 of B
+```
+
+Each call to `Di.get()` creates a new instance for non-singleton dependencies.
+
+## Examples
 
 **Basic usage example:**
 ```kotlin
