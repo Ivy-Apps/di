@@ -10,13 +10,15 @@ In a nutshell, you first register dependency factory functions in the container 
 
 ### Features
 
+- [Lightweight]()
 - [One-line setup]()
-- [Easy to use]()
+- [Easy to use?]()
 - [Auto-wiring]()
+- [Singletons]()
 - [Bindings]()
 - [Qualifiers]()
-- [Scopes]()
 - [Modules]()
+- [Scopes]()
 - [Lazy intitliazation]()
 
 ## Usage
@@ -94,7 +96,7 @@ class AndroidPlatform : Platform
 
 Di.appScope {
   autoWire(::AndroidPlatform)
-  binds<Platform, AndroidPlatform>()
+  bind<Platform, AndroidPlatform>()
   // equivalent to:
   // register<Platform> { AndroidPlatform() }
 }
@@ -119,7 +121,7 @@ TBD
 
 Currently not supported, investigating this use-case and whether we can support it nicely.
 
-### 3. Lazy
+### 3. Lazy initialization
 
 By default, all instances in Ivy DI are lazily initialized only after `Di.get()` is called.
 However, there are cases where you might want to postpone the initialization further.
@@ -142,3 +144,18 @@ Di.appScope {
 ```
 
 The instance of `HttpClient` will be created only after the `ArticlesDataSource#fetchLatest()` function is called.
+
+## ⚠️ Limitations
+
+### Generics aren't supported
+
+To avoid performance and compatibility problems we limit reflection to the bare minimum. 
+Ivy DI uses only `KClass<*>` which unfortunately doesn't make a difference between the generic type of a class.
+
+For example, if you register a factory for `Container<A>` and `Container<B>`, KClass will both treat them as just `Container`.
+As an implication, only the factory for `Container<B>` will be registered.
+
+### Maintenance
+
+The library will be maintained as long as Ivy Apps Ltd has an interest in using it.
+Given that Ivy DI currently has no community, the project may be abandoned in the future.
