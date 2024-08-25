@@ -118,9 +118,29 @@ Di.get<Platform>() // AndroidPlatform instance
 
 To bind a specific implementation to an interface (or an abstract class) use `binds<Interface, Impl>()`. Note: `Impl` must be registered in the decency graph.
 
-### 6. Named dependencies
+### 6. Named dependencies (qualifiers)
 
-TBD
+```kotlin
+interface TimeFormatter
+class H24TimeFormatter
+class AmPmTimeFormatter
+
+Di.appScope {
+  autoWire(::H24TimeFormatter)
+  autoWire(::AmPmTimeFormatter)
+  bind<TimeFormatter, H24TimeFormatter>() // default
+  bind<TimeFormatter, AmPmTimeFormatter(named = "am-pm")
+}
+
+Di.get<TimeFormatter>() // H24TimeFormatter
+Di.get<TimeFormatter>(named = "am-pm") // AmPmTimeFormatter
+```
+
+Sometimes we need to have different instances of the same type. 
+To achieve this in Ivy DI, we can set qualifiers using `named = "something"` (you're not limited only to strings because `named: Any`).
+
+> [!IMPORTANT]
+> Your "named" qualifiers must support equality checks (hashCode + equals).
 
 ### 7. Modules
 
@@ -148,7 +168,7 @@ suspend fun login() {
   }
 }
 
-// Note: This function must be called only for logged in users, otherwise Di.get() will throw an exception.
+// Note: This function must be called only for logged-in users, otherwise Di.get() will throw an exception.
 suspend fun dashboard() {
   // Use user related dependencies
   val userInfo = Di.get<UserInfo>()
@@ -156,7 +176,7 @@ suspend fun dashboard() {
 }
 
 suspend fun logout() {
-  // Free user related dependencies
+  // Free user-related dependencies
   Di.clear(UserScope)
 }
 ```
