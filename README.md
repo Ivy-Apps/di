@@ -167,7 +167,7 @@ Di.init(
 Di.get<LoginService>()
 ```
 
-To re-use and encapsulate DI logic you can create `Di.Module`s that you can active via `Di.init(MyModule)`.
+To re-use and encapsulate DI logic you can create `Di.Module`s that you can later activate via `Di.init(MyModule)`.
 
 ## Advanced Usage
 
