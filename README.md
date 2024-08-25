@@ -130,6 +130,37 @@ TBD
 
 ### 1. Scopes
 
+Ivy DI supports grouping your dependencies into scopes so you can manage their lifecycle
+and free resources as soon as the given scope is no longer needed. **AppScope** and **FeatureScope**
+are built-in but you can easily define your own scopes using `Di.newScope("my-scope")`.
+
+```kotlin
+data class UserInfo(val id: String, name: String)
+
+val UserScope = Di.newScope("user")
+fun Di.userScope(block: Di.Scope.() -> Unit) = Di.scope(UserScope, block)
+
+suspend fun login() {
+  val userInfo = loginInternally()
+  Di.userScope {
+    // Register dependencies for the lifecycle of a user
+    singleton { userInfo }
+  }
+}
+
+// Note: This function must be called only for logged in users, otherwise Di.get() will throw an exception.
+suspend fun dashboard() {
+  // Use user related dependencies
+  val userInfo = Di.get<UserInfo>()
+  println("Hello, ${userInfo.name}")
+}
+
+suspend fun logout() {
+  // Free user related dependencies
+  Di.clear(UserScope)
+}
+```
+
 ### 2. Multibindings 🚧
 
 Currently not supported, investigating this use-case and whether we can support it nicely.
