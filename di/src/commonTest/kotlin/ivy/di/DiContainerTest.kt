@@ -116,7 +116,7 @@ class DiContainerTest {
         stateHolder.number shouldBe 42
 
         // When the scope is reset
-        Di.clearInstances(FeatureScope)
+        Di.clear(FeatureScope)
 
         // Then after the reset
         Di.get<FakeStateHolder>().number shouldBe 0
