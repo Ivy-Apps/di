@@ -43,6 +43,10 @@ object Di {
      * @return The newly created [Scope].
      */
     fun newScope(name: String): Scope = Scope(name).also(scopes::add)
+
+    /**
+     * Utility function for registering dependencies in a specific scope.
+     */
     fun scope(scope: Scope, block: Scope.() -> Unit) = scope.block()
 
     /**
@@ -210,4 +214,7 @@ object Di {
     }
 }
 
+/**
+ * An exception thrown when a factory for a dependency is not found in the DI container.
+ */
 class DependencyInjectionError(msg: String) : IllegalStateException(msg)
