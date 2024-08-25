@@ -125,14 +125,14 @@ To bind a specific implementation to an interface (or an abstract class) use `bi
 
 ```kotlin
 interface TimeFormatter
-class H24TimeFormatter
-class AmPmTimeFormatter
+class H24TimeFormatter : TimeFormatter
+class AmPmTimeFormatter : TimeFormatter
 
 Di.appScope {
   autoWire(::H24TimeFormatter)
   autoWire(::AmPmTimeFormatter)
   bind<TimeFormatter, H24TimeFormatter>() // default
-  bind<TimeFormatter, AmPmTimeFormatter(named = "am-pm")
+  bind<TimeFormatter, AmPmTimeFormatter>(named = "am-pm")
 }
 
 Di.get<TimeFormatter>() // H24TimeFormatter
