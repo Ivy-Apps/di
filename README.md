@@ -200,8 +200,8 @@ suspend fun dashboard() {
 
 suspend fun logout() {
   logoutInternally()
-  // Free user-related dependencies
-  Di.clear(UserScope)
+  // Frees all dependencies in UserScope
+  Di.clear(UserScope) // UserInfo("1", "John") gets cleared
 }
 ```
 
@@ -217,7 +217,7 @@ You can do that by wrapping your dependency in `Lazy<T>` and using `Di.getLazy()
 
 ```kotlin
 class ArticlesDataSource(val client: Lazy<HttpClient>) {
-  suspend fun fetchLatest(): List<Article> = client.value.get("url)
+  suspend fun fetchLatest(): List<Article> = client.value.get("url")
 }
 class ArticlesRepository(val source: ArticlesDataSource)
 
