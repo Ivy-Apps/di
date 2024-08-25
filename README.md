@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Maven Central Version](https://img.shields.io/maven-central/v/com.ivy-apps/di)](https://central.sonatype.com/artifact/com.ivy-apps/di)
 
-# Ivy DI
+# Ivy DI ⚡
 
 A simple and lightweight runtime Dependency Injection (DI) container for Kotlin Multiplatform.
 Ivy DI is a small dependency injection library with an intuitive API and limited features.
