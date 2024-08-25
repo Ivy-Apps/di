@@ -119,7 +119,7 @@ Di.appScope {
 Di.get<Platform>() // AndroidPlatform instance
 ```
 
-To bind a specific implementation to an interface (or an abstract class) use `binds<Interface, Impl>()`. Note: `Impl` must be registered in the decency graph.
+To bind a specific implementation to an interface (or an abstract class) use `bind<Interface, Impl>()`. Note: `Impl` must be registered in the dependency graph.
 
 ### 6. Named dependencies (qualifiers)
 
