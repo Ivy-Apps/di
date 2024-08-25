@@ -192,13 +192,14 @@ suspend fun login() {
 }
 
 // Note: This function must be called only for logged-in users, otherwise Di.get() will throw an exception.
-fun dashboard() {
+suspend fun dashboard() {
   // Use user related dependencies
   val userInfo = Di.get<UserInfo>()
   println("Hello, ${userInfo.name}") // "Hello, John"
 }
 
 suspend fun logout() {
+  logoutInternally()
   // Free user-related dependencies
   Di.clear(UserScope)
 }
