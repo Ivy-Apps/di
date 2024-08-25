@@ -219,29 +219,33 @@ You can do that by wrapping your dependency in `Lazy<T>` and using `Di.getLazy<T
 class ArticlesDataSource(val client: Lazy<HttpClient>) {
   suspend fun fetchLatest(): List<Article> = client.value.get("url") // .value gets an instance of the HttpClient
 }
-class ArticlesRepository(val source: ArticlesDataSource)
+class ArticlesRepository(val source: ArticlesDataSource) {
+  suspend fun fetchLatest(): List<Article> = source.fetchLatest()
+}
 
 Di.appScope {
   singleton { HttpClient(CIO) }
   register {
     // autoWire won't work because you need to explicitly call Di.getLazy() instead of Di.get()
-    ArticlesDatSource(Di.getLazy())
+    ArticlesDataSource(Di.getLazy())
   }
   autoWire(::ArticlesRepository)
 }
+val repo = Di.get<ArticlesRepository>() // HttpClient instance not created
+repo.fetchLatest() // HttpClient instance created
 ```
 
 The instance of `HttpClient` will be created only after the `ArticlesDataSource#fetchLatest()` method is called.
 
 ## ⚠️ Limitations
 
-### Generics aren't supported
+### Generics aren't fully supported
 
 To avoid performance and compatibility problems we limit reflection to the bare minimum. 
 Ivy DI uses only `KClass<*>` which unfortunately doesn't make a difference between the generic type of a class.
 
 For example, if you register a factory for `Container<A>` and `Container<B>`, KClass will both treat them as just `Container`.
-As an implication, only the factory for `Container<B>` will be registered.
+As an implication, only the factory for `Container<B>` will be registered, and `Di.get<Container<A>>()` will throw an exception.
 
 ### Maintenance
 
