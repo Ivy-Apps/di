@@ -148,7 +148,7 @@ To achieve this in Ivy DI, we can set qualifiers using `named = "something"` (yo
 ### 7. Modules
 
 ```kotlin
-object DataModule Di.Module {
+object DataModule : Di.Module {
   override fun init() = Di.appScope {
     singleton { HttpClient(CIO) }
     register { Json() }
@@ -158,11 +158,13 @@ object DataModule Di.Module {
 }
 
 Di.init(
+  // Registers the following modules in the DI container
   modules = setOf(
     AppModule,
     DataModule,
   )
 )
+Di.get<LoginService>()
 ```
 
 To re-use and encapsulate DI logic you can create `Di.Module`s that you can active via `Di.init(MyModule)`.
