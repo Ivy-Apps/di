@@ -217,7 +217,7 @@ You can do that by wrapping your dependency in `Lazy<T>` and using `Di.getLazy<T
 
 ```kotlin
 class ArticlesDataSource(val client: Lazy<HttpClient>) {
-  suspend fun fetchLatest(): List<Article> = client.value.get("url") // .value requests the lazy value
+  suspend fun fetchLatest(): List<Article> = client.value.get("url") // .value gets an instance of the HttpClient
 }
 class ArticlesRepository(val source: ArticlesDataSource)
 
@@ -231,7 +231,7 @@ Di.appScope {
 }
 ```
 
-The instance of `HttpClient` will be created only after the `ArticlesDataSource#fetchLatest()` function is called.
+The instance of `HttpClient` will be created only after the `ArticlesDataSource#fetchLatest()` method is called.
 
 ## ⚠️ Limitations
 
