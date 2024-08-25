@@ -72,6 +72,27 @@ Di.appScope {
 
 To avoid repetitive code like `register { C(Di.get(), Di.get()) }` it's recommended to use auto-wiring.
 
+### 5. Bindings
+
+```kotlin
+interface Platform
+class AndroidPlatform : Platform
+
+Di.appScope {
+  autoWire(::AndroidPlatform)
+  binds<Platform, AndroidPlatform>()
+  // equivalent to:
+  // register<Platform> { AndroidPlatform() }
+}
+Di.get<Platform>() // AndroidPlatform instance
+```
+
+To bind a specific implementation to an interface (or an abstract class) use `binds<Interface, Impl>()`. Note: `Impl` must be registered in the decency graph.
+
+### 6. Named dependencies
+
+TBD
+
 ## Examples
 
 **Basic usage example:**
