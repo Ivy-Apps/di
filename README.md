@@ -56,13 +56,13 @@ Di.appScope {
 }
 ```
 
-Instances of `A` and `B` won't be created until the dependencies are requested.
+Instances of `A` and `B` won't be created until the dependencies are requested in the code (lazy creation).
 
 ### 2. Get dependency instance
 
 ```kotlin
 // instances of B and its dependencies will be created
-Di.get<B>() // isntance 1 of B
+Di.get<B>() // instance 1 of B
 Di.get<B>() // instance 2 of B
 ```
 
@@ -71,16 +71,18 @@ Each call to `Di.get()` creates a new instance for non-singleton dependencies.
 ### 3. Singleton dependencies
 
 ```kotlin
-class Counter(var value = 0) {
-  init { println("Counter created.")
+class Counter(var x = 0) {
+  init { print("Counter created. ")
 }
 Di.appScope {
-  singleton { Counter() }
+  singleton {
+    Counter() // instance won't be created here 
+  }
 }
 
 println(Di.get<Counter>().x) // Counter created. 0
 Di.get<Counter>.x = 42
-println(Di.get<Counter>()) // 42
+println(Di.get<Counter>().x) // 42
 ```
 
 Singleton dependencies will have only one **single instance** that will be created on the first `Di.get()` call.
@@ -93,10 +95,11 @@ class B(val a: A)
 class C(val a: A, val b: B)
 
 Di.appScope {
-  autoWireSingleton(::A)
-  autoWire(::B)
+  autoWire(::A)
+  autoWireSingleton(::B) // for singletons
   autoWire(::C)
 }
+Di.get<C>()
 ```
 
 To avoid repetitive code like `register { C(Di.get(), Di.get()) }` it's recommended to use auto-wiring.
