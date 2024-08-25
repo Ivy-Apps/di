@@ -48,9 +48,14 @@ object Di {
         register<Base> { get<Impl>(named = named) }
     }
 
+    inline fun <reified T : Any> getLazy(named: Any? = null): Lazy<T> {
+        factoryOrThrow(T::class, named) // ensure that factory exists
+        return lazy { get<T>(named) }
+    }
+
     inline fun <reified T : Any> get(named: Any? = null): T {
         val classKey = T::class
-        val (scope, factory) = factory(classKey, named)
+        val (scope, factory) = factoryOrThrow(classKey, named)
         val depKey = DependencyKey(scope, classKey, named)
         return if (classKey in singletons) {
             if (depKey in singletonInstances) {
@@ -69,7 +74,7 @@ object Di {
         }
     }
 
-    fun factory(
+    fun factoryOrThrow(
         classKey: KClass<*>,
         named: Any?,
     ): Pair<Scope, Factory> = scopes
