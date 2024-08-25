@@ -27,7 +27,7 @@ Di.appScope {
 }
 ```
 
-Instances of `A` and `B` won't be created until these dependencies are requested.
+Instances of `A` and `B` won't be created until the dependencies are requested.
 
 ### 2. Get dependency instance
 
@@ -38,6 +38,23 @@ Di.get<B>() // instance 2 of B
 ```
 
 Each call to `Di.get()` creates a new instance for non-singleton dependencies.
+
+### 3. Singleton dependencies
+
+```kotlin
+class Counter(var value = 0) {
+  init { println("Counter created.")
+}
+Di.appScope {
+  singleton { Counter() }
+}
+
+println(Di.get<Counter>().x) // Counter created. 0
+Di.get<Counter>.x = 42
+println(Di.get<Counter>()) // 42
+```
+
+Singleton dependencies will have only one **single instance** that will be created on the first `Di.get()` call.
 
 ## Examples
 
