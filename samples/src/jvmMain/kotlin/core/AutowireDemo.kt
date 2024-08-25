@@ -1,7 +1,7 @@
 package core
 
 import ivy.di.Di
-import ivy.di.Di.binds
+import ivy.di.Di.bind
 import ivy.di.Di.init
 import ivy.di.autowire.autoWire
 import ivy.di.autowire.autoWireSingleton
@@ -15,7 +15,7 @@ fun main() {
         autoWire(::ArticlesRemoteDataSource)
         autoWire(::ArticlesLocalDataSource)
         autoWire(::CombinedArticlesRepository)
-        binds<ArticlesRepository, CombinedArticlesRepository>()
+        bind<ArticlesRepository, CombinedArticlesRepository>()
     }
 
     Di.get<ArticlesRepository>()

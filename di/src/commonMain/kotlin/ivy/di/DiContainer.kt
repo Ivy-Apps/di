@@ -42,7 +42,7 @@ object Di {
         singletons.add(classKey)
     }
 
-    inline fun <reified Base : Any, reified Impl : Base> Scope.binds(
+    inline fun <reified Base : Any, reified Impl : Base> Scope.bind(
         named: Any? = null,
     ) {
         register<Base> { get<Impl>(named = named) }
