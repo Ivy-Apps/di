@@ -10,16 +10,16 @@ In a nutshell, you first register dependency factory functions in the container 
 
 ### Features
 
-- [Lightweight]()
-- [One-line setup]()
-- [Easy to use?]()
-- [Auto-wiring]()
-- [Singletons]()
-- [Bindings]()
-- [Qualifiers]()
-- [Modules]()
-- [Scopes]()
-- [Lazy intitliazation]()
+- [Lightweight](di/src/commonMain/kotlin/ivy/di/DiContainer.kt)
+- [One-line setup](https://github.com/Ivy-Apps/di?tab=readme-ov-file#0-setup)
+- [Easy to use?](https://github.com/Ivy-Apps/di?tab=readme-ov-file#1-register-a-dependency)
+- [Auto-wiring](https://github.com/Ivy-Apps/di?tab=readme-ov-file#4-auto-wiring)
+- [Singletons](https://github.com/Ivy-Apps/di?tab=readme-ov-file#3-singleton-dependencies)
+- [Bindings](https://github.com/Ivy-Apps/di?tab=readme-ov-file#5-bindings)
+- [Qualifiers](https://github.com/Ivy-Apps/di?tab=readme-ov-file#6-named-dependencies-qualifiers)
+- [Modules](https://github.com/Ivy-Apps/di?tab=readme-ov-file#7-modules)
+- [Scopes](https://github.com/Ivy-Apps/di?tab=readme-ov-file#1-scopes)
+- [Lazy intitliazation](https://github.com/Ivy-Apps/di?tab=readme-ov-file#3-lazy-initialization)
 
 ## Usage
 
