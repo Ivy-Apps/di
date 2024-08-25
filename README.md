@@ -56,6 +56,22 @@ println(Di.get<Counter>()) // 42
 
 Singleton dependencies will have only one **single instance** that will be created on the first `Di.get()` call.
 
+### 4. Auto-wiring
+
+```kotlin
+class A
+class B(val a: A)
+class C(val a: A, val b: B)
+
+Di.appScope {
+  autoWireSingleton(::A)
+  autoWire(::B)
+  autoWire(::C)
+}
+```
+
+To avoid repetitive code like `register { C(Di.get(), Di.get()) }` it's recommended to use auto-wiring.
+
 ## Examples
 
 **Basic usage example:**
