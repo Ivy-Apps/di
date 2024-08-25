@@ -99,6 +99,12 @@ TBD
 
 ## Advanced Usage
 
+### 1. Scopes
+
+### 2. Multibindings
+
+### 3. Lazy
+
 ## Examples
 
 **Basic usage example:**
