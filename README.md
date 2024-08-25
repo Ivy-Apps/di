@@ -212,12 +212,12 @@ Currently not supported, investigating this use-case and whether we can support 
 ### 3. Lazy initialization
 
 By default, all instances in Ivy DI are lazily initialized only after `Di.get()` is called.
-However, there are cases where you might want to postpone the initialization further.
-You can do that by wrapping your dependency in `Lazy<T>` and using `Di.getLazy()` instead.
+However, there are cases where you might want to postpone the initialization even further.
+You can do that by wrapping your dependency in `Lazy<T>` and using `Di.getLazy<T>()` instead.
 
 ```kotlin
 class ArticlesDataSource(val client: Lazy<HttpClient>) {
-  suspend fun fetchLatest(): List<Article> = client.value.get("url")
+  suspend fun fetchLatest(): List<Article> = client.value.get("url") // .value requests the lazy value
 }
 class ArticlesRepository(val source: ArticlesDataSource)
 
