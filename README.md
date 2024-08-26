@@ -8,6 +8,22 @@ Ivy DI is a small dependency injection library with an intuitive API and limited
 
 In a nutshell, you first register dependency factory functions in the container **Di.register { T() }** and then get instances via **Di.get\<T>()**.
 
+```kotlin
+interface ArticlesDataSource
+class RemoteArticlesDataSource(val client: HttpClient, val baseUrl: BaseUrlProvider)
+class ArticlesRepository(val source: ArticlesDataSource)
+
+Di.appScope {
+  register { BaseUrlProvider("https://ivy-apps.com") }
+  singleton { HttpClient(CIO) }
+  autoWire(::RemoteArticlesDataSource)
+  bind<ArticlesDataSource, RemoteArticlesDataSource>()
+  autoWire(::ArticlesRepository)
+}
+
+val repo = Di.get<ArticlesRepository>() // ArticlesRepository instance created
+```
+
 ### Features
 
 - [Lightweight](di/src/commonMain/kotlin/ivy/di/DiContainer.kt)
