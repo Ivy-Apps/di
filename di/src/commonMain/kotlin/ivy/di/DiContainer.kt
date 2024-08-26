@@ -3,7 +3,12 @@ package ivy.di
 import kotlin.jvm.JvmInline
 import kotlin.reflect.KClass
 
-typealias Factory = () -> Any
+typealias Factory<T> = () -> T
+/**
+ * A qualifier used to distinguish between multiple dependencies of the same type.
+ * It must support equality checks: **hashCode** and **equals**.
+ */
+typealias Qualifier = Any
 
 val AppScope = Di.newScope("app")
 val FeatureScope = Di.newScope("feature")
@@ -11,9 +16,10 @@ val FeatureScope = Di.newScope("feature")
 object Di {
     private val scopes = mutableSetOf<Scope>()
 
-    val factories = mutableMapOf<DependencyKey, Factory>()
+    val factories = mutableMapOf<DependencyKey, Factory<Any>>()
     val singletons = mutableSetOf<KClass<*>>()
     val singletonInstances = mutableMapOf<DependencyKey, Any>()
+    val multibindingFactories = mutableMapOf<MultibindingDependencyKey, Set<Factory<*>>>()
 
     /**
      * Initializes a set of modules by calling their [Module.init] functions.
@@ -60,6 +66,14 @@ object Di {
         noinline factory: () -> T,
     ) {
         factories[DependencyKey(this, T::class, named)] = factory
+    }
+
+    inline fun <reified T : Any> Scope.registerIntoSet(
+        named: Any,
+        noinline factory: () -> T,
+    ) {
+        TODO()
+//        multibindingFactories[MultibindingDependencyKey(this, T::class, named)] = factory
     }
 
     /**
@@ -134,7 +148,7 @@ object Di {
     fun factoryOrThrow(
         classKey: KClass<*>,
         named: Any?,
-    ): Pair<Scope, Factory> = scopes
+    ): Pair<Scope, Factory<*>> = scopes
         .firstNotNullOfOrNull { scope ->
             scopedFactoryOrNull(scope, classKey, named)
         } ?: throw DependencyInjectionError(diErrorMsg(classKey, named))
@@ -191,13 +205,26 @@ object Di {
      * A key used to identify a dependency in the DI container.
      * @param scope The scope in which the dependency is registered.
      * @param klass The type of the dependency. Note: Generic types are not supported (Lazy<A> == Lazy<B> true).
+     * @param qualifier A qualifier to distinguish between multiple dependencies of the same type.
+     * _The qualifier must support hashCode and equals._
+     */
+    data class MultibindingDependencyKey(
+        val scope: Scope,
+        val klass: KClass<*>,
+        val qualifier: Qualifier,
+    )
+
+    /**
+     * A key used to identify a dependency in the DI container.
+     * @param scope The scope in which the dependency is registered.
+     * @param klass The type of the dependency. Note: Generic types are not supported (Lazy<A> == Lazy<B> true).
      * @param qualifier An optional qualifier to distinguish between multiple dependencies of the same type.
      * _The qualifier must support hashCode and equals._
      */
     data class DependencyKey(
         val scope: Scope,
         val klass: KClass<*>,
-        val qualifier: Any?,
+        val qualifier: Qualifier?,
     )
 
     /**
