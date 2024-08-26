@@ -263,9 +263,9 @@ Ivy DI uses only `KClass<*>` which unfortunately doesn't make a difference betwe
 For example, if you register a factory for `Container<A>` and `Container<B>`, KClass will both treat them as just `Container`.
 As an implication, only the factory for `Container<B>` will be registered, and `Di.get<Container<A>>()` will throw an exception.
 
-### Thread-safety 🚧
+### Thread-safety
 
-Currently, registering factories and getting depdencies isn't synchronized. The way we use DI in Ivy Apps doesn't require it but if the community needs it we'll add such (given that it doesn't affect performance negatively).
+The Ivy DI APIs aren't synchronized and thread-safety is a **responsibility of the API user**. We made this decision to keep the DI container free of Java (or 3rd party) dependencies and prioritize efficiency. We recommend registering your dependencies on the main thread.
 
 ### Maintenance
 
