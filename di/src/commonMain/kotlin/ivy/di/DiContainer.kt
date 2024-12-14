@@ -256,6 +256,37 @@ object Di {
    * Di.get<String>(affinity = FeatureScope) // "world"
    * Di.get<String>() // not deterministic
    * ```
+   *
+   * An example for managing lifecycle using DI scopes:
+   *
+   * ```kotlin
+   * data class UserInfo(val id: String, val name: String)
+   *
+   * val UserScope = Di.newScope("user")
+   * fun Di.userScope(block: Di.Scope.() -> Unit) = Di.inScope(UserScope, block) // helper function (optional)
+   *
+   * suspend fun login() {
+   *   val userInfo = loginInternally() // UserInfo("1", "John")
+   *   Di.userScope {
+   *     // Register dependencies for the lifecycle of a user
+   *     singleton { userInfo }
+   *   }
+   * }
+   *
+   * // Note: This function must be called only for logged-in users,
+   * // otherwise Di.get() will throw an exception.
+   * suspend fun dashboard() {
+   *   // Use user related dependencies
+   *   val userInfo = Di.get<UserInfo>()
+   *   println("Hello, ${userInfo.name}") // "Hello, John"
+   * }
+   *
+   * suspend fun logout() {
+   *   logoutInternally()
+   *   // Frees all dependencies in UserScope
+   *   Di.clear(UserScope) // UserInfo("1", "John") gets cleared
+   * }
+   * ```
    */
   @JvmInline
   value class Scope internal constructor(val value: String)
