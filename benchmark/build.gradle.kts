@@ -22,7 +22,7 @@ benchmark {
     named("main") {
       warmups = 2
       iterations = 5
-      iterationTime = 5
+      iterationTime = 10
       iterationTimeUnit = "s"
 
       reportFormat = "csv"
