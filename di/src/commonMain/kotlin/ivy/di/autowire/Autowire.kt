@@ -11,18 +11,21 @@ import kotlin.jvm.JvmName
  * Make sure to **import [R] before** calling `autoWire(::R)`,
  * otherwise your IDE might not recognize the function.
  *
+ * The affinity of the dependencies of [R] will be set to the receiver scope.
+ * ```
+ *class Repository(val a: A, val b: B)
+ *
+ *Di.appScope {
+ *  autoWire(::Repository)
+ *  // equivalent to:
+ *  // register { Repository(Di.get(affinity = AppScope), Di.get(affinity = AppScope)) }
+ *}
+ * ```
+ *
+ * @receiver the [Scope] in which to wire the [R] dependency.
+ * [R]'s dependencies will have affinity for the receiver [Scope].
  * @param constructor A function reference to the constructor of the dependency like `::R`.
  * [R] must be imported before calling this function.
- *
- * ```
- * class Repository(val a: A, val b: B, val c: C)
- *
- * Di.appScope {
- *   autoWire(::Repository)
- *   // equivalent to:
- *   // register { Repository(Di.get(), Di.get(), Di.get()) }
- * }
- * ```
  */
 inline fun <reified R : Any> Scope.autoWire(
   crossinline constructor: () -> R,

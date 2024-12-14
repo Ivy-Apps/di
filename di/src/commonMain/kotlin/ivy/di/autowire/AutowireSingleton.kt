@@ -5,24 +5,7 @@ import ivy.di.Di.singleton
 import kotlin.jvm.JvmName
 
 /**
- * Automatically registers a singleton factory for a dependency [R] with the given constructor.
- * [ivy.di.Di.get] will be called for each constructor parameter of [R].
- *
- * Make sure to **import [R] before** calling `autoWireSingleton(::R)`,
- * otherwise your IDE might not recognize the function.
- *
- * @param constructor A function reference to the constructor of the dependency like `::R`.
- * [R] must be imported before calling this function.
- *
- * ```
- * class Repository(val a: A, val b: B, val c: C)
- *
- * Di.appScope {
- *   autoWireSingleton(::Repository)
- *   // equivalent to:
- *   // singleton { Repository(Di.get(), Di.get(), Di.get()) }
- * }
- * ```
+ * Same as [autoWire] but for [singleton]s.
  */
 inline fun <reified R : Any> Scope.autoWireSingleton(
   crossinline constructor: () -> R,
