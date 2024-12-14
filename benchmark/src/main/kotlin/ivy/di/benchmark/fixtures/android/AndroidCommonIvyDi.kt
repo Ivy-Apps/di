@@ -1,4 +1,4 @@
-package ivy.di.benchmark.fixtures
+package ivy.di.benchmark.fixtures.android
 
 import ivy.di.Di
 import ivy.di.Di.bind

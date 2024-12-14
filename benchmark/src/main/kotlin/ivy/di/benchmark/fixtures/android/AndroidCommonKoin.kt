@@ -1,4 +1,4 @@
-package ivy.di.benchmark.fixtures
+package ivy.di.benchmark.fixtures.android
 
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf

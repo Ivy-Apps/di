@@ -1,8 +1,8 @@
 package ivy.di.benchmark
 
 import ivy.di.Di
-import ivy.di.benchmark.fixtures.AndroidCommonModuleIvyDi
-import ivy.di.benchmark.fixtures.AndroidCommonModuleKoin
+import ivy.di.benchmark.fixtures.android.AndroidCommonModuleIvyDi
+import ivy.di.benchmark.fixtures.android.AndroidCommonModuleKoin
 import kotlinx.benchmark.*
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin

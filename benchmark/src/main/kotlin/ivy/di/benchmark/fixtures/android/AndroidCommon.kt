@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package ivy.di.benchmark.fixtures
+package ivy.di.benchmark.fixtures.android
 
 interface DispatchersProvider
 class AndroidDispatchersProvider : DispatchersProvider
