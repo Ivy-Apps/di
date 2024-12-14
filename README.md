@@ -401,3 +401,13 @@ dependencies on the main thread.
 
 The library will be maintained as long as Ivy Apps Ltd has an interest in using it.
 Given that Ivy DI currently has no community, the project may be abandoned in the future.
+
+> **Disclaimer**
+>
+> _Ivy DI is provided "as is" under the [Apache 2.0 License](LICENSE),
+without warranties of any kind, including but not limited to
+fitness for a particular purpose or security.
+Use it at your own risk. The authors are not liable for
+any issues, defects, security vulnerabilities,
+or damages arising from its use.
+Maintenance, updates, and support are not guaranteed._
