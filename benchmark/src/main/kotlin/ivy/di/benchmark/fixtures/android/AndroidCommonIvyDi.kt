@@ -15,6 +15,9 @@ object AndroidCommonModuleIvyDi : Di.Module {
     singleton { HttpClient() }
     autoWire(::LocalStorage)
 
+    singleton { Backstack("/") }
+    autoWireSingleton(::Navigation)
+
     autoWireSingleton(::SessionManager)
 
     register<ArticlesDataSource> {
@@ -34,5 +37,12 @@ object AndroidCommonModuleIvyDi : Di.Module {
 
     autoWire(::ArticlesViewModel)
     autoWire(::AuthorViewModel)
+
+    autoWire(::ContentScreen)
+    autoWire(::ArticlesScreen)
+    autoWire(::AuthorScreen)
+
+    autoWire(::App)
+    autoWireSingleton(::AppHolder)
   }
 }

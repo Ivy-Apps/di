@@ -1,11 +1,11 @@
 package ivy.di.benchmark
 
 import ivy.di.Di
-import ivy.di.benchmark.fixtures.android.AndroidCommonModuleIvyDi
-import ivy.di.benchmark.fixtures.android.AndroidCommonModuleKoin
+import ivy.di.benchmark.fixtures.android.*
 import kotlinx.benchmark.*
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.java.KoinJavaComponent.getKoin
 import org.openjdk.jmh.annotations.Level
 import java.util.concurrent.TimeUnit
 
@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 class DiComparisonBenchmark {
+
+  private val diGetIterations = 100
 
   @TearDown(Level.Invocation)
   fun cleanup() {
@@ -35,12 +37,24 @@ class DiComparisonBenchmark {
   @Benchmark
   fun androidCommonIvyDi() {
     Di.init(AndroidCommonModuleIvyDi)
+    repeat(diGetIterations) {
+      Di.get<ArticlesViewModel>()
+      Di.get<AuthorViewModel>()
+      Di.get<App>()
+      Di.get<AppHolder>()
+    }
   }
 
   @Benchmark
   fun androidCommonKoin() {
     startKoin {
       modules(AndroidCommonModuleKoin)
+    }
+    repeat(diGetIterations) {
+      getKoin().get<ArticlesViewModel>()
+      getKoin().get<AuthorViewModel>()
+      getKoin().get<App>()
+      getKoin().get<AppHolder>()
     }
   }
 }

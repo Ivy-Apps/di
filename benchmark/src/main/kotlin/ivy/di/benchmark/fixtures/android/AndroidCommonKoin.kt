@@ -11,11 +11,14 @@ val AndroidCommonModuleKoin = module {
   single { HttpClient() }
   factoryOf(::LocalStorage)
 
+  single { Backstack("/") }
+  singleOf(::Navigation)
+
   singleOf(::SessionManager)
 
   factory<ArticlesDataSource> {
     RemoteArticlesDataSource(
-      httpClient = get(),
+      httpClient = lazy { get() },
       sessionManger = get()
     )
   }
@@ -29,4 +32,11 @@ val AndroidCommonModuleKoin = module {
 
   factoryOf(::ArticlesViewModel)
   factoryOf(::AuthorViewModel)
+
+  singleOf(::ContentScreen)
+  singleOf(::ArticlesScreen)
+  singleOf(::AuthorScreen)
+
+  factoryOf(::App)
+  singleOf(::AppHolder)
 }

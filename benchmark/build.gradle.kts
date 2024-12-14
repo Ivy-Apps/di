@@ -20,9 +20,9 @@ benchmark {
   }
   configurations {
     named("main") {
-      warmups = 2
-      iterations = 5
-      iterationTime = 10
+      warmups = 5
+      iterations = 10
+      iterationTime = 5
       iterationTimeUnit = "s"
 
       reportFormat = "csv"
