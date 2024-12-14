@@ -20,13 +20,13 @@ benchmark {
   }
   configurations {
     named("main") {
-      warmups = 3
-      iterations = 10
-      iterationTime = 3
+      warmups = 2
+      iterations = 5
+      iterationTime = 5
       iterationTimeUnit = "s"
 
       reportFormat = "csv"
-      outputTimeUnit = "s"
+      outputTimeUnit = "ms"
     }
   }
 }
