@@ -1,29 +1,32 @@
 package ivy.di.benchmark
 
+import ivy.di.Di
 import kotlinx.benchmark.*
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.openjdk.jmh.annotations.Level
 import java.util.concurrent.TimeUnit
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-class DiBenchmark {
-  private val size = 100
-  private val list = ArrayList<Int>()
+class DiComparisonBenchmark {
 
-  @Setup
-  fun prepare() {
-    for (i in 0..<size) {
-      list.add(i)
-    }
-  }
-
-  @TearDown
+  @TearDown(Level.Invocation)
   fun cleanup() {
-    list.clear()
+    stopKoin() // Clean up Koin
+    Di.reset() // Clean up Ivy DI
   }
 
   @Benchmark
-  fun benchmarkMethod(): Int {
-    return list.sum()
+  fun startIvyDi() {
+    Di.appScope {}
+  }
+
+  @Benchmark
+  fun startKoinDi() {
+    startKoin {
+      modules(emptyList())
+    }
   }
 }
