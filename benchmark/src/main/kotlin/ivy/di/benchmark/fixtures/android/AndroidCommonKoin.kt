@@ -6,7 +6,11 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val AndroidCommonModuleKoin = module {
+  singleOf(::Context)
+
   factoryOf(::AndroidDispatchersProvider) { bind<DispatchersProvider>() }
+
+  factoryOf(::AndroidLogger) { bind<Logger>() }
 
   single { HttpClient() }
   factoryOf(::LocalStorage)
@@ -25,7 +29,7 @@ val AndroidCommonModuleKoin = module {
 
   singleOf(::ArticlesRepositoryImpl) { bind<ArticlesRepository>() }
 
-  single { ArticlesUseCase(get(), get()) }
+  singleOf(::ArticlesUseCase)
 
   factoryOf(::AuthorDataSource)
   factoryOf(::AuthorRepository)

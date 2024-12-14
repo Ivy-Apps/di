@@ -9,8 +9,13 @@ import ivy.di.autowire.autoWireSingleton
 
 object AndroidCommonModuleIvyDi : Di.Module {
   override fun init() = Di.appScope {
+    autoWireSingleton(::Context)
+
     autoWire(::AndroidDispatchersProvider)
     bind<DispatchersProvider, AndroidDispatchersProvider>()
+
+    autoWire(::AndroidLogger)
+    bind<Logger, AndroidLogger>()
 
     singleton { HttpClient() }
     autoWire(::LocalStorage)
