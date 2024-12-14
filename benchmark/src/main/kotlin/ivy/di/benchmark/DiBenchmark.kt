@@ -1,6 +1,8 @@
 package ivy.di.benchmark
 
 import ivy.di.Di
+import ivy.di.benchmark.fixtures.AndroidCommonModuleIvyDi
+import ivy.di.benchmark.fixtures.AndroidCommonModuleKoin
 import kotlinx.benchmark.*
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -24,9 +26,21 @@ class DiComparisonBenchmark {
   }
 
   @Benchmark
-  fun startKoinDi() {
+  fun startKoin() {
     startKoin {
       modules(emptyList())
+    }
+  }
+
+  @Benchmark
+  fun androidCommonIvyDi() {
+    Di.init(AndroidCommonModuleIvyDi)
+  }
+
+  @Benchmark
+  fun androidCommonKoin() {
+    startKoin {
+      modules(AndroidCommonModuleKoin)
     }
   }
 }
