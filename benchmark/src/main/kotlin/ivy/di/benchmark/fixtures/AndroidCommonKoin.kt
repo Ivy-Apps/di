@@ -1,38 +1,32 @@
 package ivy.di.benchmark.fixtures
 
 import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val AndroidCommonModuleKoin = module {
-  // DispatchersProvider
-  singleOf(::AndroidDispatchersProvider) { bind<DispatchersProvider>() }
+  factoryOf(::AndroidDispatchersProvider) { bind<DispatchersProvider>() }
 
-  // Basic dependencies
   single { HttpClient() }
-  single { LocalStorage() }
+  factoryOf(::LocalStorage)
 
-  // SessionManager
-  single { SessionManager(get()) }
+  singleOf(::SessionManager)
 
-  // ArticlesDataSource
-  single<ArticlesDataSource> {
+  factory<ArticlesDataSource> {
     RemoteArticlesDataSource(
-      httpClient = get(), // Lazy resolution in Koin happens by default
+      httpClient = get(),
       sessionManger = get()
     )
   }
 
-  // ArticlesRepository
   singleOf(::ArticlesRepositoryImpl) { bind<ArticlesRepository>() }
 
-  // ArticlesUseCase
   single { ArticlesUseCase(get(), get()) }
 
-  // Author-related dependencies
-  singleOf(::AuthorDataSource)
-  singleOf(::AuthorRepository)
+  factoryOf(::AuthorDataSource)
+  factoryOf(::AuthorRepository)
 
-  // ArticlesViewModel
-  single { ArticlesViewModel(get(), get(), get()) }
+  factoryOf(::ArticlesViewModel)
+  factoryOf(::AuthorViewModel)
 }

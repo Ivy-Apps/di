@@ -5,6 +5,7 @@ import ivy.di.Di.bind
 import ivy.di.Di.register
 import ivy.di.Di.singleton
 import ivy.di.autowire.autoWire
+import ivy.di.autowire.autoWireSingleton
 
 object AndroidCommonModuleIvyDi : Di.Module {
   override fun init() = Di.appScope {
@@ -14,7 +15,7 @@ object AndroidCommonModuleIvyDi : Di.Module {
     singleton { HttpClient() }
     autoWire(::LocalStorage)
 
-    autoWire(::SessionManager)
+    autoWireSingleton(::SessionManager)
 
     register<ArticlesDataSource> {
       RemoteArticlesDataSource(
@@ -32,5 +33,6 @@ object AndroidCommonModuleIvyDi : Di.Module {
     autoWire(::AuthorRepository)
 
     autoWire(::ArticlesViewModel)
+    autoWire(::AuthorViewModel)
   }
 }

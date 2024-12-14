@@ -33,3 +33,10 @@ class ArticlesViewModel(
   val articlesUseCase: ArticlesUseCase,
   val authorRepository: AuthorRepository,
 )
+
+class AuthorViewModel(
+  val dispatchers: DispatchersProvider,
+  val articlesUseCase: ArticlesUseCase,
+  val authorRepository: AuthorRepository,
+  val sessionManger: SessionManager,
+)
