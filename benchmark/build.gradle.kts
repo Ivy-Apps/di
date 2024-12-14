@@ -14,6 +14,20 @@ benchmark {
   }
 }
 
+benchmark {
+  targets {
+    register("jvm")
+  }
+  configurations {
+    named("main") {
+      warmups = 5
+      iterations = 10
+      iterationTime = 1
+      iterationTimeUnit = "s"
+    }
+  }
+}
+
 dependencies {
   implementation(libs.kotlin.benchmark)
   implementation(project(":di"))

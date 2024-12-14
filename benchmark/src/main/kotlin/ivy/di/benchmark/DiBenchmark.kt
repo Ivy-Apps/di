@@ -1,10 +1,13 @@
 package ivy.di.benchmark
 
 import kotlinx.benchmark.*
+import java.util.concurrent.TimeUnit
 
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-class MyBenchmark {
-  private val size = 10
+class DiBenchmark {
+  private val size = 100
   private val list = ArrayList<Int>()
 
   @Setup
