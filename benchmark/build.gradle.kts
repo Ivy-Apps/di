@@ -25,7 +25,7 @@ benchmark {
       iterationTime = 3
       iterationTimeUnit = "s"
 
-      reportFormat = "html"
+      reportFormat = "csv"
       outputTimeUnit = "s"
     }
   }
