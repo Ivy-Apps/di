@@ -49,5 +49,6 @@ object AndroidCommonModuleIvyDi : Di.Module {
 
     autoWire(::App)
     autoWireSingleton(::AppHolder)
+    autoWire(::AppAppHolder)
   }
 }

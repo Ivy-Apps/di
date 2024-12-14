@@ -43,4 +43,5 @@ val AndroidCommonModuleKoin = module {
 
   factoryOf(::App)
   singleOf(::AppHolder)
+  factoryOf(::AppAppHolder)
 }

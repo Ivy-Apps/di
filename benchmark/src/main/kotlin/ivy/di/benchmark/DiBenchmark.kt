@@ -42,6 +42,7 @@ class DiComparisonBenchmark {
       Di.get<AuthorViewModel>()
       Di.get<App>()
       Di.get<AppHolder>()
+      Di.get<AppAppHolder>()
     }
   }
 
@@ -55,6 +56,7 @@ class DiComparisonBenchmark {
       getKoin().get<AuthorViewModel>()
       getKoin().get<App>()
       getKoin().get<AppHolder>()
+      getKoin().get<AppAppHolder>()
     }
   }
 }

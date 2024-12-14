@@ -55,6 +55,7 @@ class AuthorViewModel(
   val articlesUseCase: ArticlesUseCase,
   val authorRepository: AuthorRepository,
   val sessionManger: SessionManager,
+  val context: Context,
 )
 
 class ContentScreen(
@@ -86,4 +87,10 @@ class AppHolder(
   val app: App,
   val context: Context,
   val logger: Logger,
+)
+
+// Complicate the DI graph
+class AppAppHolder(
+  val app: App,
+  val appHolder: AppHolder,
 )
