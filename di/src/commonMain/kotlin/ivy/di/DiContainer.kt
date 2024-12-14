@@ -6,7 +6,16 @@ import kotlin.reflect.KClass
 
 typealias Factory = () -> Any
 
+/**
+ * Built-in [Di.Scope] for registering dependencies for the lifetime of the application.
+ * __Note:__ you need to manually manage the lifecycle by clearing when no longer needed
+ * via [Di.clear].
+ */
 val AppScope = Di.newScope("app")
+
+/**
+ * Same like [AppScope] but for the lifetime of a feature.
+ */
 val FeatureScope = Di.newScope("feature")
 
 object Di {
@@ -30,12 +39,14 @@ object Di {
   }
 
   /**
-   * Scope used to register dependencies for the entire lifetime of the application.
+   * Scope used to register dependencies in [AppScope],
+   * intended for the entire lifetime of the application.
    */
   fun appScope(block: Scope.() -> Unit) = AppScope.block()
 
   /**
-   * Scope used to register dependencies for a feature.
+   * Scope used to register dependencies in [FeatureScope]
+   * intended for the lifetime of the feature for a feature.
    */
   fun featureScope(block: Scope.() -> Unit) = FeatureScope.block()
 
@@ -47,7 +58,8 @@ object Di {
   fun newScope(name: String): Scope = Scope(name).also(scopes::add)
 
   /**
-   * Utility function for registering dependencies in a specific scope.
+   * Utility function for registering dependencies in a specific [scope].
+   * @param scope the [Di.Scope] in which the dependencies will be registered
    */
   fun inScope(scope: Scope, block: Scope.() -> Unit) = scope.block()
 
