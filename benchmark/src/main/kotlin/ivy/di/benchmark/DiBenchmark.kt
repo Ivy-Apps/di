@@ -6,9 +6,11 @@ import ivy.di.benchmark.fixtures.modules.*
 import ivy.di.benchmark.fixtures.modules.ivy.AndroidGraphIvyDi
 import ivy.di.benchmark.fixtures.modules.ivy.BeGraphIvyDi
 import ivy.di.benchmark.fixtures.modules.ivy.CommonGraphIvyDi
+import ivy.di.benchmark.fixtures.modules.ivy.ComplexGraphIvyDi
 import ivy.di.benchmark.fixtures.modules.koin.AndroidGraphKoin
 import ivy.di.benchmark.fixtures.modules.koin.BeGraphKoin
 import ivy.di.benchmark.fixtures.modules.koin.CommonGraphKoin
+import ivy.di.benchmark.fixtures.modules.koin.ComplexGraphKoin
 import kotlinx.benchmark.*
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -84,21 +86,29 @@ class DiComparisonBenchmark {
 
   @Benchmark
   fun complexGraphIvyDI() {
-    Di.init(CommonGraphIvyDi, AndroidGraphIvyDi, BeGraphIvyDi)
+    Di.init(
+      CommonGraphIvyDi,
+      AndroidGraphIvyDi,
+      BeGraphIvyDi,
+      ComplexGraphIvyDi,
+    )
     repeat(complexGraphGets) {
-      Di.get<App>()
-      Di.get<ServerApp>()
+      Di.get<MultiHolderFinal>()
     }
   }
 
   @Benchmark
   fun complexGraphKoin() {
     startKoin {
-      modules(CommonGraphKoin, AndroidGraphKoin, BeGraphKoin)
+      modules(
+        CommonGraphKoin,
+        AndroidGraphKoin,
+        BeGraphKoin,
+        ComplexGraphKoin,
+      )
     }
     repeat(complexGraphGets) {
-      getKoin().get<App>()
-      getKoin().get<ServerApp>()
+      getKoin().get<MultiHolderFinal>()
     }
   }
 }
