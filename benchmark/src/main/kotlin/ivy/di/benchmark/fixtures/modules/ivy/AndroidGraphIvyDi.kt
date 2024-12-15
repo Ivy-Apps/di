@@ -12,13 +12,9 @@ object AndroidGraphIvyDi : Di.Module {
   override fun init() = Di.appScope {
     autoWireSingleton(::Context)
 
-    autoWire(::AndroidDispatchersProvider)
-    bind<DispatchersProvider, AndroidDispatchersProvider>()
+    autoWire(::RealDispatchersProvider)
+    bind<DispatchersProvider, RealDispatchersProvider>()
 
-    autoWire(::AndroidLogger)
-    bind<Logger, AndroidLogger>()
-
-    singleton { HttpClient() }
     autoWire(::LocalStorage)
 
     singleton { Backstack("/") }

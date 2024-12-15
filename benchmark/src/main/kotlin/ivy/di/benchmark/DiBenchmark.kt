@@ -4,7 +4,9 @@ import ivy.di.Di
 import ivy.di.benchmark.fixtures.*
 import ivy.di.benchmark.fixtures.modules.*
 import ivy.di.benchmark.fixtures.modules.ivy.AndroidGraphIvyDi
+import ivy.di.benchmark.fixtures.modules.ivy.CommonGraphIvyDi
 import ivy.di.benchmark.fixtures.modules.koin.AndroidGraphKoin
+import ivy.di.benchmark.fixtures.modules.koin.CommonGraphKoin
 import kotlinx.benchmark.*
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -42,7 +44,7 @@ class DiComparisonBenchmark {
 
   @Benchmark
   fun smallGraphIvyDI() {
-    Di.init(AndroidGraphIvyDi)
+    Di.init(CommonGraphIvyDi, AndroidGraphIvyDi)
     repeat(smallGraphGets) {
       Di.get<App>()
     }
@@ -51,10 +53,61 @@ class DiComparisonBenchmark {
   @Benchmark
   fun smallGraphKoin() {
     startKoin {
-      modules(AndroidGraphKoin)
+      modules(CommonGraphKoin, AndroidGraphKoin)
     }
     repeat(smallGraphGets) {
       getKoin().get<App>()
     }
+  }
+
+  @Benchmark
+  fun mediumGraphIvyDI() {
+    Di.init(AndroidGraphIvyDi)
+    repeat(mediumGraphGets) {
+      Di.get<App>()
+    }
+  }
+
+  @Benchmark
+  fun mediumGraphKoin() {
+    startKoin {
+      modules(AndroidGraphKoin)
+    }
+    repeat(mediumGraphGets) {
+      getKoin().get<App>()
+    }
+  }
+
+  @Benchmark
+  fun largeGraphIvyDI() {
+    Di.init(AndroidGraphIvyDi)
+    repeat(mediumGraphGets) {
+      Di.get<App>()
+    }
+  }
+
+  @Benchmark
+  fun largeGraphKoin() {
+    startKoin {
+      modules(AndroidGraphKoin)
+    }
+    repeat(mediumGraphGets) {
+      getKoin().get<App>()
+    }
+  }
+}
+
+fun main() {
+  println("Testing correctness")
+  DiComparisonBenchmark().apply {
+    cleanup()
+    smallGraphIvyDI()
+    smallGraphKoin()
+    cleanup()
+    mediumGraphIvyDI()
+    mediumGraphKoin()
+    cleanup()
+    largeGraphIvyDI()
+    largeGraphKoin()
   }
 }

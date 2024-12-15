@@ -2,14 +2,8 @@
 
 package ivy.di.benchmark.fixtures
 
-interface DispatchersProvider
-class AndroidDispatchersProvider : DispatchersProvider
-
 class Context
-interface Logger
-class AndroidLogger : Logger
 
-class HttpClient
 class LocalStorage
 
 class SessionManager(val localStorage: LocalStorage, val logger: Logger)
