@@ -16,7 +16,7 @@ val BeGraphKoin = module {
 
   singleOf(::Database)
 
-  factoryOf(::AuthorRepository)
+  factoryOf(::AuthRepository)
   factoryOf(::GoogleLoginUseCase)
   factoryOf(::AuthService)
   factoryOf(::AuthApi)

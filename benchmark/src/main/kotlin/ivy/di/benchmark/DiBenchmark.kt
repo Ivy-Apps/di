@@ -104,7 +104,7 @@ class DiComparisonBenchmark {
 }
 
 fun main() {
-  println("Testing correctness")
+  println("Testing correctness...")
   DiComparisonBenchmark().apply {
     cleanup()
     smallGraphIvyDI()
@@ -118,4 +118,5 @@ fun main() {
     complexGraphIvyDI()
     complexGraphKoin()
   }
+  println("Correctness ensured.")
 }
