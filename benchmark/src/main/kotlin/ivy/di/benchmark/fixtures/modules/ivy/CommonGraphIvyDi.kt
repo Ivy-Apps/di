@@ -12,7 +12,7 @@ object CommonGraphIvyDi : Di.Module {
     bind<DispatchersProvider, RealDispatchersProvider>()
     autoWire(::LoggerImpl)
     bind<Logger, LoggerImpl>()
-    autoWire(::Json)
+    autoWireSingleton(::Json)
     autoWire(::KotlinXSerialization)
     bind<Serialization, KotlinXSerialization>()
     autoWireSingleton(::HttpClient)

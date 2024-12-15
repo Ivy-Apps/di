@@ -9,7 +9,7 @@ import org.koin.dsl.module
 val CommonGraphKoin = module {
   factoryOf(::RealDispatchersProvider) { bind<DispatchersProvider>() }
   factoryOf(::LoggerImpl) { bind<Logger>() }
-  factoryOf(::Json)
+  singleOf(::Json)
   factoryOf(::KotlinXSerialization) { bind<Serialization>() }
   singleOf(::HttpClient)
 }

@@ -24,7 +24,6 @@ class AuthService(
   val repository: AuthRepository,
   val googleLoginUseCase: GoogleLoginUseCase,
 )
-
 class AuthApi(
   val authService: AuthService,
   val logger: Logger,
@@ -35,12 +34,10 @@ class CarsRepository(
   val database: Database,
   val logger: Logger,
 )
-
 class CarsService(
   val authService: AuthService,
   val repository: CarsRepository,
 )
-
 class CarsApi(val service: CarsService)
 
 class Apis(
@@ -48,7 +45,6 @@ class Apis(
   val authApi: AuthApi,
   val carsApi: CarsApi,
 )
-
 class ServerApp(
   val serverConfig: ServerConfig,
   val ktorApp: KtorApp,
