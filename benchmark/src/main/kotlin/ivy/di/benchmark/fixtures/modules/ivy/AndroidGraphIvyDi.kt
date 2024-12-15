@@ -1,4 +1,4 @@
-package ivy.di.benchmark.fixtures.android
+package ivy.di.benchmark.fixtures.modules.ivy
 
 import ivy.di.Di
 import ivy.di.Di.bind
@@ -6,8 +6,9 @@ import ivy.di.Di.register
 import ivy.di.Di.singleton
 import ivy.di.autowire.autoWire
 import ivy.di.autowire.autoWireSingleton
+import ivy.di.benchmark.fixtures.*
 
-object AndroidCommonModuleIvyDi : Di.Module {
+object AndroidGraphIvyDi : Di.Module {
   override fun init() = Di.appScope {
     autoWireSingleton(::Context)
 
@@ -48,7 +49,5 @@ object AndroidCommonModuleIvyDi : Di.Module {
     autoWire(::AuthorScreen)
 
     autoWire(::App)
-    autoWireSingleton(::AppHolder)
-    autoWire(::AppAppHolder)
   }
 }

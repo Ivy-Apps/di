@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package ivy.di.benchmark.fixtures.android
+package ivy.di.benchmark.fixtures
 
 interface DispatchersProvider
 class AndroidDispatchersProvider : DispatchersProvider
@@ -81,16 +81,4 @@ class App(
   val authorScreen: AuthorScreen,
   val articlesScreen: ArticlesScreen,
   val logger: Logger,
-)
-
-class AppHolder(
-  val app: App,
-  val context: Context,
-  val logger: Logger,
-)
-
-// Complicate the DI graph
-class AppAppHolder(
-  val app: App,
-  val appHolder: AppHolder,
 )

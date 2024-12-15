@@ -1,7 +1,10 @@
 package ivy.di.benchmark
 
 import ivy.di.Di
-import ivy.di.benchmark.fixtures.android.*
+import ivy.di.benchmark.fixtures.*
+import ivy.di.benchmark.fixtures.modules.*
+import ivy.di.benchmark.fixtures.modules.ivy.AndroidGraphIvyDi
+import ivy.di.benchmark.fixtures.modules.koin.AndroidGraphKoin
 import kotlinx.benchmark.*
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -9,12 +12,15 @@ import org.koin.java.KoinJavaComponent.getKoin
 import org.openjdk.jmh.annotations.Level
 import java.util.concurrent.TimeUnit
 
+@Suppress("unused")
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 class DiComparisonBenchmark {
 
-  private val diGetIterations = 100
+  private val smallGraphGets = 20
+  private val mediumGraphGets = 50
+  private val complexGraphGets = 200
 
   @TearDown(Level.Invocation)
   fun cleanup() {
@@ -35,28 +41,20 @@ class DiComparisonBenchmark {
   }
 
   @Benchmark
-  fun androidCommonIvyDi() {
-    Di.init(AndroidCommonModuleIvyDi)
-    repeat(diGetIterations) {
-      Di.get<ArticlesViewModel>()
-      Di.get<AuthorViewModel>()
+  fun smallGraphIvyDI() {
+    Di.init(AndroidGraphIvyDi)
+    repeat(smallGraphGets) {
       Di.get<App>()
-      Di.get<AppHolder>()
-      Di.get<AppAppHolder>()
     }
   }
 
   @Benchmark
-  fun androidCommonKoin() {
+  fun smallGraphKoin() {
     startKoin {
-      modules(AndroidCommonModuleKoin)
+      modules(AndroidGraphKoin)
     }
-    repeat(diGetIterations) {
-      getKoin().get<ArticlesViewModel>()
-      getKoin().get<AuthorViewModel>()
+    repeat(smallGraphGets) {
       getKoin().get<App>()
-      getKoin().get<AppHolder>()
-      getKoin().get<AppAppHolder>()
     }
   }
 }
