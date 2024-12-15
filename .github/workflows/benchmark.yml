@@ -21,9 +21,3 @@ jobs:
 
       - name: Run benchmarks
         run: ./gradlew :benchmark:benchmark
-
-      - name: Upload benchmark results
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-results
-          path: benchmark/build/reports/benchmark/
