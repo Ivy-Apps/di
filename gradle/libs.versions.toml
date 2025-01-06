@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-koin = "4.1.0-Beta1"
+koin = "4.1.0-Beta3"
 kotlin = "2.1.0"
 android-minSdk = "24"
 android-compileSdk = "34"
