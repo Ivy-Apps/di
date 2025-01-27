@@ -1,12 +1,12 @@
 [versions]
-agp = "8.7.3"
-koin = "4.1.0-Beta1"
-kotlin = "2.1.0"
+agp = "8.8.0"
+koin = "4.1.0-Beta5"
+kotlin = "2.1.10"
 android-minSdk = "24"
 android-compileSdk = "34"
 kotest = "5.9.1"
 kotlin-benchmark = "0.4.13"
-kodein = "7.23.1"
+kodein = "7.25.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
