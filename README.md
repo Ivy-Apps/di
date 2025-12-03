@@ -2,7 +2,7 @@
 >
 > **Depreciation Notice**
 >
-> This library is deprecated and no longer maintained. If you're targeting native Android we recommend using [Hitl](https://developer.android.com/training/dependency-injection/hilt-android), for KMP - [Metro](https://github.com/ZacSweers/metro). If you're looking for a similar API, check out [Koin](https://github.com/InsertKoinIO/koin).
+> This library is deprecated and no longer maintained. If you're targeting native Android we recommend using [Hilt](https://developer.android.com/training/dependency-injection/hilt-android), for KMP - [Metro](https://github.com/ZacSweers/metro). If you're looking for a similar API, check out [Koin](https://github.com/InsertKoinIO/koin).
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Maven Central Version](https://img.shields.io/maven-central/v/com.ivy-apps/di?color=5C3DF5)](https://central.sonatype.com/artifact/com.ivy-apps/di)
